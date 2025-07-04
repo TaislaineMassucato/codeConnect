@@ -101,6 +101,7 @@ textarea {
     border-radius: 4px;
     font-family: var(--font-family);
     line-height: 22.5px;
+    
 }
 
 form div input{
@@ -228,10 +229,14 @@ textarea{
     margin-left: 18px;
 }
 
-.container-imagem-none{
+.container-imagem-nome{
     display: flex;
     gap: 8px;
     color: var(--secondary-color);
     font-size: 15px;
 }
 
+
+@media {
+    
+}
