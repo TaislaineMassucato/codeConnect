@@ -52,27 +52,67 @@ inputUpload.addEventListener("change", async (evento) => {
         }
     }
 })
+// Seleciona o input de tags e a lista de tags
 const inputTags = document.getElementById("categoria");
 const listaTags = document.getElementById("lista-tags")
 
-inputTags.addEventListener("keypress", (evento) => {
-    if(evento.key === "Enter"){
-        evento.preventDefault();
-        const tagTexto = inputTags.value.trim();
-        if(tagTexto !== ""){
-            const tagNova = document.createElement("li");
-            tagNova.innerHTML = `<p>${tagTexto}<p/> <img src="./img/close-black.svg" class="remove-tag">`
-            listaTags.appendChild(tagNova);
-            inputTags.value = "";
+// Adiciona um ouvinte de evento para capturar cliques na lista de tags
+listaTags.addEventListener("click", (evento) => {
+    if(evento.target.classList.contains("remove-tag")){// Verifica se o elemento clicado é um botão de remoção de tag
+        const tagRemove = evento.target.parentElement;
+        listaTags.removeChild(tagRemove);// Remove o pai do botão (ou seja, o <li> que contém a tag)
+    }
+})
+
+const tagsDisponiveis = ["Front-end", "Back-end", "Full-stack", "Data-Science", "QA", "Infra"];
+
+async function verificarTagsDisponiveis(tagTexto){
+    return new Promise((resolve) => {
+        setTimeout(()=>{
+            resolve(tagsDisponiveis.includes(tagTexto));
+        }, 1000)
+    })
+}
+
+// Adiciona um ouvinte de evento para capturar a tecla Enter no input
+inputTags.addEventListener("keypress", async (evento) => {
+    if(evento.key === "Enter"){ // Verifica se a tecla pressionada foi Enter
+        evento.preventDefault();// Evita o comportamento padrão do Enter (submeter o formulário)
+        const tagTexto = inputTags.value.trim();// Obtém o texto da tag e remove espaços em branco extras
+        // Verifica se o texto da tag não está vazio
+        if(tagTexto !== "") { 
+            try {
+                const tagExiste = await verificarTagsDisponiveis(tagTexto);
+                if(tagExiste){
+                      // Cria um novo elemento <li> para a nova tag
+                    const tagNova = document.createElement("li");
+                    tagNova.innerHTML = `<p>${tagTexto}</p> <img src="./img/close-black.svg" class="remove-tag">`
+                    listaTags.appendChild(tagNova);  // Adiciona a nova tag à lista de tags
+                    inputTags.value = "";// Limpa o input de tags para o próximo input
+                }else{
+                    alert("Tag não encontrada!!");
+                }
+            }catch{
+                console.log("Erro na requisição ");
+                alert("Erro na requisição.Verifique o console!")
+            }
         }
     }
 })
 
-listaTags.addEventListener("click", (evento) => {
-    if(evento.target.classList.contains("remove-tag")){
-        const tagRemove = evento.target.parentElement;
-        listaTags.removeChild(tagRemove);    
-    }
+const botaoPublicar = document.querySelector(".botao-publicar")
+
+botaoPublicar.addEventListener("click", async (evento) => {
+    evento.preventDefault();
+    
+const nomeProjeto = document.getElementById("nome").value;
+const descricaoProjeto = document.getElementById("descricao").value;
+const tagsProjeto = Array.from(listaTags.querySelectorAll("p")).map((tag) => tag.textContent);
+
+console.log(nomeProjeto)
+console.log(descricaoProjeto)
+console.log(tagsProjeto)
+
 })
 
 
