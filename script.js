@@ -102,19 +102,6 @@ inputTags.addEventListener("keypress", async (evento) => {
 
 const botaoPublicar = document.querySelector(".botao-publicar")
 
-botaoPublicar.addEventListener("click", async (evento) => {
-    evento.preventDefault();
-
-    const nomeProjeto = document.getElementById("nome").value;
-    const descricaoProjeto = document.getElementById("descricao").value;
-    const tagsProjeto = Array.from(listaTags.querySelectorAll("p")).map((tag) => tag.textContent);
-
-    console.log(nomeProjeto)
-    console.log(descricaoProjeto)
-    console.log(tagsProjeto)
-
-})
-
 async function publicarProjeto(nomeProjeto, descricaoProjeto, tagsProjeto) {
     return Promise((resolve, reject) =>{
         setTimeout(() => {
@@ -129,4 +116,35 @@ async function publicarProjeto(nomeProjeto, descricaoProjeto, tagsProjeto) {
     })
 }
 
+botaoPublicar.addEventListener("click", async (evento) => {
+    evento.preventDefault();
+
+    const nomeProjeto = document.getElementById("nome").value;
+    const descricaoProjeto = document.getElementById("descricao").value;
+    const tagsProjeto = Array.from(listaTags.querySelectorAll("p")).map((tag) => tag.textContent);
+
+    try{
+        const resultado= await publicarProjeto(nomeProjeto, descricaoProjeto,tagsProjeto);
+        console.log(resultado);
+        alert("Deu certo!!")
+
+    }catch(error){
+        console.log("Deu errado: ", error)
+        alert("Deu tudo errado!!");
+    }
+})
+
+const botaoDescartar = document.querySelector(".botao-descartar");
+
+botaoDescartar.addEventListener('click', (evento) => {
+    evento.preventDefault();
+
+    const formulario = document.querySelector("form");
+    formulario.reset();
+
+    imagemPrincipal.src = "./img/imagem1.png";
+    nomeDaImagem.textContent = "image_projeto.png";
+
+    listaTags.innerHTML = ""
+})
 
